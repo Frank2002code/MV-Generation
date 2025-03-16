@@ -128,12 +128,17 @@ def run_pipeline(
     negative_prompt: str = "watermark, ugly, deformed, noisy, blurry, low contrast",
     lora_scale: float = 1.0,
     device: str = "cuda",
-    azimuth_deg: list = [0, 45, 90, 135, 180, 225, 270, 315],  # 方位角
 ):
     # Prepare cameras
-    if azimuth_deg is None:
+    azimuth_deg = None
+    if num_views == 2:
+        azimuth_deg = [0, 180]  # 方位角
+    elif num_views == 8:
         azimuth_deg = [0, 45, 90, 135, 180, 225, 270, 315]
-        # azimuth_deg = [0, 36, 72, 108, 144, 180, 216, 252, 288, 324]
+    else:
+        if azimuth_deg is None:
+            azimuth_deg = [0, 36, 72, 108, 144, 180, 216, 252, 288, 324]
+    
     cameras = get_orthogonal_camera(
         elevation_deg=[0] * num_views,
         distance=[1.8] * num_views,
@@ -196,9 +201,9 @@ if __name__ == "__main__":
     parser.add_argument("--device", type=str, default="cuda")
     # Inference
     parser.add_argument("--num_views", type=int, default=8)
-    parser.add_argument(
-        "--azimuth_deg", type=int, nargs="+", default=[0, 45, 90, 135, 180, 225, 270, 315]
-    )
+    # parser.add_argument(
+    #     "--azimuth_deg", type=int, nargs="+", default=[0, 45, 90, 135, 180, 225, 270, 315]
+    # )
     parser.add_argument("--image", type=str, required=True)
     parser.add_argument("--text", type=str, default="high quality")
     parser.add_argument("--num_inference_steps", type=int, default=50)
@@ -211,7 +216,7 @@ if __name__ == "__main__":
         type=str,
         default="watermark, ugly, deformed, noisy, blurry, low contrast",
     )
-    parser.add_argument("--output", type=str, default="output.png")
+    parser.add_argument("--output", type=str, default="output")
     # Extra
     parser.add_argument("--remove_bg", action="store_true", help="Remove background")
     args = parser.parse_args()
@@ -259,7 +264,8 @@ if __name__ == "__main__":
         negative_prompt=args.negative_prompt,
         device=args.device,
         remove_bg_fn=remove_bg_fn,
-        azimuth_deg=args.azimuth_deg,
     )
-    make_image_grid(images, rows=1).save(args.output)
-    reference_image.save(args.output.rsplit(".", 1)[0] + "_reference.png")
+    # make_image_grid(images, rows=1).save(args.output)
+    for idx, img in enumerate(images):
+        img.save(f"{args.output}_{idx}.png")
+    # reference_image.save(args.output.rsplit(".", 1)[0] + "_reference.png")
