@@ -82,7 +82,7 @@ def remove_bg(image, net, transform, device):
     return image
 
 
-def preprocess_image(image: Image.Image, height, width):
+def preprocess_image(image: Image.Image, height: int, width: int) -> Image.Image:
     image = np.array(image)
     alpha = image[..., 3] > 0
     H, W = alpha.shape
@@ -114,30 +114,34 @@ def preprocess_image(image: Image.Image, height, width):
 
 
 def run_pipeline(
-    pipe,
-    num_views,
-    text,
-    image,
-    height,
-    width,
-    num_inference_steps,
-    guidance_scale,
-    seed,
-    remove_bg_fn=None,
-    reference_conditioning_scale=1.0,
-    negative_prompt="watermark, ugly, deformed, noisy, blurry, low contrast",
-    lora_scale=1.0,
-    device="cuda",
+    pipe: MVAdapterI2MVSDPipeline,
+    num_views: int,
+    text: str,
+    image: str,
+    height: int,
+    width: int,
+    num_inference_steps: int,
+    guidance_scale: float,
+    seed: int,
+    remove_bg_fn: callable = None,
+    reference_conditioning_scale: float = 1.0,
+    negative_prompt: str = "watermark, ugly, deformed, noisy, blurry, low contrast",
+    lora_scale: float = 1.0,
+    device: str = "cuda",
+    azimuth_deg: list = [0, 45, 90, 135, 180, 225, 270, 315],  # 方位角
 ):
     # Prepare cameras
+    if azimuth_deg is None:
+        azimuth_deg = [0, 45, 90, 135, 180, 225, 270, 315]
+        # azimuth_deg = [0, 36, 72, 108, 144, 180, 216, 252, 288, 324]
     cameras = get_orthogonal_camera(
-        elevation_deg=[0, 0, 0, 0, 0, 0],
+        elevation_deg=[0] * num_views,
         distance=[1.8] * num_views,
         left=-0.55,
         right=0.55,
         bottom=-0.55,
         top=0.55,
-        azimuth_deg=[x - 90 for x in [0, 45, 90, 180, 270, 315]],
+        azimuth_deg=[x - 90 for x in azimuth_deg],
         device=device,
     )
 
@@ -188,10 +192,13 @@ if __name__ == "__main__":
     parser.add_argument("--scheduler", type=str, default=None)
     parser.add_argument("--lora_model", type=str, default=None)
     parser.add_argument("--adapter_path", type=str, default="huanngzh/mv-adapter")
-    parser.add_argument("--num_views", type=int, default=6)
     # Device
     parser.add_argument("--device", type=str, default="cuda")
     # Inference
+    parser.add_argument("--num_views", type=int, default=8)
+    parser.add_argument(
+        "--azimuth_deg", type=int, nargs="+", default=[0, 45, 90, 135, 180, 225, 270, 315]
+    )
     parser.add_argument("--image", type=str, required=True)
     parser.add_argument("--text", type=str, default="high quality")
     parser.add_argument("--num_inference_steps", type=int, default=50)
@@ -252,6 +259,7 @@ if __name__ == "__main__":
         negative_prompt=args.negative_prompt,
         device=args.device,
         remove_bg_fn=remove_bg_fn,
+        azimuth_deg=args.azimuth_deg,
     )
     make_image_grid(images, rows=1).save(args.output)
     reference_image.save(args.output.rsplit(".", 1)[0] + "_reference.png")

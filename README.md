@@ -1,10 +1,10 @@
-# MV-Adapter: Multi-view Consistent Image Generation Made Easy🚀
+# MV-Generation: Multi-view Consistent Image Generation Made Easy🚀
 
 ## 🏠 <a href="https://huanngzh.github.io/MV-Adapter-Page/" target="_blank">Project Page</a> | <a href="https://arxiv.org/abs/2412.03632" target="_blank">Paper</a> | <a href="https://huggingface.co/huanngzh/mv-adapter" target="_blank">Model Weights</a> | [Demo](#model-zoo--demos) | <a href="https://github.com/huanngzh/ComfyUI-MVAdapter" target="_blank">ComfyUI</a>
 
 ![teaser](assets/doc/teaser.jpg)
 
-MV-Adapter is a **versatile plug-and-play adapter** that adapt T2I models and their derivatives to multi-view generators.
+MV-Generation is a **versatile plug-and-play generation** that adapt T2I models and their derivatives to multi-view generators.
 
 Highlight Features: Generate multi-view images
 
@@ -20,7 +20,6 @@ Highlight Features: Generate multi-view images
 
 ## TOC
 
-* [Model Zoo & Demos](#model-zoo--demos)
 * [Installation](#installation)
 * [Notes](#notes)
 * [Usage: Multi-view Generation](#usage-multiview-generation)
@@ -29,36 +28,20 @@ Highlight Features: Generate multi-view images
   * Option3. [ComfyUI](#comfyui)
 * [Citation](#citation)
 
-## Model Zoo & Demos
-
-No need to download manually. Running the scripts will download model weights automatically.
-
-Notes: Running MV-Adapter for SDXL may need higher GPU memory and more time, but produce higher-quality and higher-resolution results. On the other hand, running its SD2.1 variant needs lower computing cost, but shows a bit lower performance.
-
-|            Model            | Base Model |                                                          HF Weights                                                          |                                                                   Demo Link                                                                   |
-| :-------------------------: | :--------: | :--------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------: |
-|      Text-to-Multiview      |   SD2.1    |  [mvadapter_t2mv_sd21.safetensors](https://huggingface.co/huanngzh/mv-adapter/resolve/main/mvadapter_t2mv_sd21.safetensors)  |                                                                                                                                               |
-|      Text-to-Multiview      |    SDXL    |  [mvadapter_t2mv_sdxl.safetensors](https://huggingface.co/huanngzh/mv-adapter/resolve/main/mvadapter_t2mv_sdxl.safetensors)  | [General](https://huggingface.co/spaces/VAST-AI/MV-Adapter-T2MV-SDXL) / [Anime](https://huggingface.co/spaces/huanngzh/MV-Adapter-T2MV-Anime) |
-|     Image-to-Multiview      |   SD2.1    |  [mvadapter_i2mv_sd21.safetensors](https://huggingface.co/huanngzh/mv-adapter/resolve/main/mvadapter_i2mv_sd21.safetensors)  |                                                                                                                                               |
-|     Image-to-Multiview      |    SDXL    |  [mvadapter_i2mv_sdxl.safetensors](https://huggingface.co/huanngzh/mv-adapter/resolve/main/mvadapter_t2mv_sdxl.safetensors)  |                                      [Demo](https://huggingface.co/spaces/VAST-AI/MV-Adapter-I2MV-SDXL)                                       |
-| Text-Geometry-to-Multiview  |    SDXL    | [mvadapter_tg2mv_sdxl.safetensors](https://huggingface.co/huanngzh/mv-adapter/resolve/main/mvadapter_tg2mv_sdxl.safetensors) |                                                                                                                                               |
-| Image-Geometry-to-Multiview |    SDXL    | [mvadapter_ig2mv_sdxl.safetensors](https://huggingface.co/huanngzh/mv-adapter/resolve/main/mvadapter_ig2mv_sdxl.safetensors) |                                                                                                                                               |
-|  Image-to-Arbitrary-Views   |    SDXL    |                                                                                                                              |                                                                                                                                               |
-
 ## Installation
 
 Clone the repo first:
 
 ```Bash
-git clone https://github.com/huanngzh/MV-Adapter.git
-cd MV-Adapter
+git clone https://github.com/Frank2002code/MV-Generation.git
+cd MV-Generation
 ```
 
 (Optional) Create a fresh conda env:
 
 ```Bash
-conda create -n mvadapter python=3.10
-conda activate mvadapter
+conda create -n 3d python=3.10
+conda activate 3d
 ```
 
 Install necessary packages (torch > 2):
