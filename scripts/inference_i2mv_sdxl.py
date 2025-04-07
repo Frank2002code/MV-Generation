@@ -132,8 +132,13 @@ def run_pipeline(
     azimuth_deg=None,
 ):
     # Prepare cameras
-    if azimuth_deg is None:
-        azimuth_deg = [0, 45, 90, 180, 270, 315]
+    if num_views == 2:
+        azimuth_deg = [0, 180]  # 方位角
+    elif num_views == 8:
+        azimuth_deg = [0, 45, 90, 135, 180, 225, 270, 315]
+    else:
+        if azimuth_deg is None:
+            azimuth_deg = [0, 36, 72, 108, 144, 180, 216, 252, 288, 324]
     cameras = get_orthogonal_camera(
         elevation_deg=[0] * num_views,
         distance=[1.8] * num_views,
@@ -197,10 +202,10 @@ if __name__ == "__main__":
     # Device
     parser.add_argument("--device", type=str, default="cuda")
     # Inference
-    parser.add_argument("--num_views", type=int, default=6)  # not used
-    parser.add_argument(
-        "--azimuth_deg", type=int, nargs="+", default=[0, 45, 90, 180, 270, 315]
-    )
+    parser.add_argument("--num_views", type=int, default=8)  # not used
+    # parser.add_argument(
+    #     "--azimuth_deg", type=int, nargs="+", default=[0, 45, 90, 180, 270, 315]
+    # )
     parser.add_argument("--image", type=str, required=True)
     parser.add_argument("--text", type=str, default="high quality")
     parser.add_argument("--num_inference_steps", type=int, default=50)
