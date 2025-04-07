@@ -12,7 +12,6 @@ from mvadapter.schedulers.scheduling_shift_snr import ShiftSNRScheduler
 from mvadapter.utils import (
     get_orthogonal_camera,
     get_plucker_embeds_from_cameras_ortho,
-    make_image_grid,
 )
 
 
